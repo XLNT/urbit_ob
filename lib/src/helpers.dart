@@ -1,16 +1,18 @@
+import 'dart:core';
+
 import 'package:urbit_ob/src/muk.dart';
 
-const ux_1_0000 = 0x10000;
-const ux_ffff_ffff = 0xffffffff;
-const ux_1_0000_0000 = 0x100000000;
-const ux_ffff_ffff_ffff_ffff = 0xffffffffffffffff;
-const ux_ffff_ffff_0000_0000 = 0xffffffff00000000;
+final ux_1_0000 = BigInt.from(0x10000);
+final ux_ffff_ffff = BigInt.from(0xffffffff);
+final ux_1_0000_0000 = BigInt.from(0x100000000);
+final ux_ffff_ffff_ffff_ffff = BigInt.from(0xffffffffffffffff);
+final ux_ffff_ffff_0000_0000 = BigInt.from(0xffffffff00000000);
 
-const u_65535 = 65535;
-const u_65536 = 65536;
+final u_65535 = BigInt.from(65535);
+final u_65536 = BigInt.from(65536);
 
-int fen(int r, int a, int b, int Function(int, int) f, int m) {
-  int loop(int j, int ell, int arr) {
+BigInt fen(int r, BigInt a, BigInt b, BigInt Function(int, BigInt) f, BigInt m) {
+  BigInt loop(int j, BigInt ell, BigInt arr) {
     if (j < 1) {
       return a * arr + ell;
     } else {
@@ -38,14 +40,14 @@ int fen(int r, int a, int b, int Function(int, int) f, int m) {
   return loop(r, L, R);
 }
 
-int Fen(int r, int a, int b, int k, int Function(int, int) f, int m) {
+BigInt Fen(int r, BigInt a, BigInt b, BigInt k, BigInt Function(int, BigInt) f, BigInt m) {
   final c = fen(r, a, b, f, m);
   return c < k ? c : fen(r, a, b, f, c);
 }
 
-int tail(int n) => Fen(4, u_65535, u_65536, ux_ffff_ffff, F, n);
+BigInt tail(BigInt n) => Fen(4, u_65535, u_65536, ux_ffff_ffff, F, n);
 
-int F(int j, int n) {
+BigInt F(int j, BigInt n) {
   const raku = [
     0xb76d5eed,
     0xee281300,
@@ -53,11 +55,11 @@ int F(int j, int n) {
     0x4b387af7,
   ];
 
-  return muk(raku[j], 2, n);
+  return BigInt.from(muk(raku[j], 2, n));
 }
 
-int fe(int r, int a, int b, int Function(int, int) f, int m) {
-  int loop(int j, int ell, int arr) {
+BigInt fe(int r, BigInt a, BigInt b, BigInt Function(int, BigInt) f, BigInt m) {
+  BigInt loop(int j, BigInt ell, BigInt arr) {
     if (j > r) {
       return r % 2 != 0 ? (a * arr + ell) : arr == a ? (a * arr + ell) : (a * ell + arr);
     } else {
@@ -75,15 +77,15 @@ int fe(int r, int a, int b, int Function(int, int) f, int m) {
   return loop(1, L, R);
 }
 
-int Fe(int r, int a, int b, int k, int Function(int, int) f, int m) {
+BigInt Fe(int r, BigInt a, BigInt b, BigInt k, BigInt Function(int, BigInt) f, BigInt m) {
   final c = fe(r, a, b, f, m);
   return c < k ? c : fe(r, a, b, f, c);
 }
 
-int feis(int n) => Fe(4, u_65535, u_65536, ux_ffff_ffff, F, n);
+BigInt feis(BigInt n) => Fe(4, u_65535, u_65536, ux_ffff_ffff, F, n);
 
-int fein(int n) {
-  int loop(int pyn) {
+BigInt fein(BigInt n) {
+  BigInt loop(BigInt pyn) {
     final lo = n & ux_ffff_ffff;
     final hi = n & ux_ffff_ffff_0000_0000;
 
@@ -97,8 +99,8 @@ int fein(int n) {
   return loop(n);
 }
 
-int fynd(int n) {
-  int loop(int cry) {
+BigInt fynd(BigInt n) {
+  BigInt loop(BigInt cry) {
     final lo = cry & ux_ffff_ffff;
     final hi = cry & ux_ffff_ffff_0000_0000;
 

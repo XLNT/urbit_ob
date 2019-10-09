@@ -1,11 +1,11 @@
-const ux_FF = 0xFF;
-const ux_FF00 = 0xFF00;
-const u_256 = 256;
+final ux_FF = BigInt.from(0xFF);
+final ux_FF00 = BigInt.from(0xFF00);
+final u_256 = BigInt.from(256);
 
-int muk(int syd, int len, int key) {
+int muk(int syd, int len, BigInt key) {
   final lo = key & ux_FF;
   final hi = (key & ux_FF00) ~/ u_256;
-  final kee = String.fromCharCode(lo) + String.fromCharCode(hi);
+  final kee = String.fromCharCode(lo.toInt()) + String.fromCharCode(hi.toInt());
 
   return murmurhash3_32_gc(kee, syd);
 }

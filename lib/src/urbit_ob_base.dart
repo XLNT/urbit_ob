@@ -1,10 +1,17 @@
+import 'dart:core';
+
 import 'package:quiver/iterables.dart';
 import 'package:logging/logging.dart';
-import 'dart:math' as math;
 
 import 'package:urbit_ob/src/helpers.dart';
 
 final Logger _log = Logger('Ob');
+
+final zero = BigInt.zero;
+final one = BigInt.one;
+final two = BigInt.two;
+final three = BigInt.from(3);
+final four = BigInt.from(4);
 
 final pre = """
 dozmarbinwansamlitsighidfidlissogdirwacsabwissib
@@ -59,41 +66,42 @@ final suffixes = chunkString(suf, 3);
 List<String> patp2syls(String name) => chunkString(name.replaceAll(RegExp(r'[\^~-]'), ''), 3);
 
 /// raises 2^n
-int bex(int n) => math.pow(2, n);
+BigInt bex(BigInt n) => BigInt.two.pow(n.toInt());
 
 /// divides c / 2^(2^a * b)
-int rsh(int a, int b, int c) => c ~/ (bex(bex(a) * b));
+BigInt rsh(BigInt a, BigInt b, BigInt c) => c ~/ (bex(bex(a) * b));
 
 /// no clue
-int met(int a, int b, [int c = 0]) => b == 0 ? c : met(a, rsh(a, 1, b), c + 1);
+BigInt met(BigInt a, BigInt b, BigInt c) =>
+    b == BigInt.zero ? c : met(a, rsh(a, BigInt.one, b), c + BigInt.one);
 
 /// ¯\\_(ツ)_/¯
-int end(int a, int b, int c) => c % bex(bex(a) * b);
+BigInt end(BigInt a, BigInt b, BigInt c) => c % bex(bex(a) * b);
 
 // API
 
 /// encode an integer as patp
-String patp(int n) {
+String patp(BigInt n) {
   final sxz = fein(n);
-  final dyy = met(4, sxz);
-  final dyx = met(3, sxz);
+  final dyy = met(four, sxz, BigInt.zero);
+  final dyx = met(three, sxz, BigInt.zero);
 
-  String loop(int tsxz, int timp, String trep) {
-    final log = end(4, 1, tsxz);
-    final pre = prefixes[rsh(3, 1, log)];
-    final suf = suffixes[end(3, 1, log)];
-    final etc = timp % 4 == 0 ? timp == 0 ? '' : '--' : '-';
+  String loop(BigInt tsxz, BigInt timp, String trep) {
+    final log = end(four, one, tsxz);
+    final pre = prefixes[rsh(three, one, log).toInt()];
+    final suf = suffixes[end(three, one, log).toInt()];
+    final etc = timp % four == BigInt.zero ? timp == BigInt.zero ? '' : '--' : '-';
 
     final res = pre + suf + etc + trep;
 
-    return timp == dyy ? trep : loop(rsh(4, 1, tsxz), timp + 1, res);
+    return timp == dyy ? trep : loop(rsh(four, one, tsxz), timp + one, res);
   }
 
-  return '~' + (dyx <= 1 ? suffixes[sxz] : loop(sxz, 0, ''));
+  return '~' + (dyx <= one ? suffixes[sxz.toInt()] : loop(sxz, zero, ''));
 }
 
 /// decode a patp string to dec representation
-int patp2dec(String name) {
+BigInt patp2dec(String name) {
   // TODO: validity
   final syls = patp2syls(name);
 
@@ -107,5 +115,5 @@ int patp2dec(String name) {
         : acc + syl2bin(prefixes.indexOf(syl)),
   );
 
-  return fynd(int.parse(addr, radix: 2));
+  return fynd(BigInt.parse(addr, radix: 2));
 }

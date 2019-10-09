@@ -91,15 +91,15 @@ void main() {
 
   group('urbit muk cases', () {
     test('case 1', () {
-      expect(muk.muk(0, 2, 0x101), 0x42081a9b);
+      expect(muk.muk(0, 2, BigInt.from(0x101)), 0x42081a9b);
     });
 
     test('case 2', () {
-      expect(muk.muk(0, 2, 0x201), 0x64c7667e);
+      expect(muk.muk(0, 2, BigInt.from(0x201)), 0x64c7667e);
     });
 
     test('case 3', () {
-      expect(muk.muk(0, 2, 0x4812), 0xa30782dc);
+      expect(muk.muk(0, 2, BigInt.from(0x4812)), 0xa30782dc);
     });
   });
 }

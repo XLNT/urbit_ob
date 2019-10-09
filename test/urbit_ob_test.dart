@@ -26,6 +26,14 @@ void main() {
     group('.patp', () {
       patps.forEach((pair) {
         test("should convert ${pair[0]} to ${pair[1]}", () {
+          expect(ob.patp(BigInt.from(pair[0])), equals(pair[1]));
+        });
+      });
+    });
+
+    group('.patp (big)', () {
+      bigpatps.forEach((pair) {
+        test("should convert ${pair[0]} to ${pair[1]}", () {
           expect(ob.patp(pair[0]), equals(pair[1]));
         });
       });
@@ -34,7 +42,7 @@ void main() {
     group('.patp2dec', () {
       patps.forEach((pair) {
         test("should convert ${pair[1]} to ${pair[0]}", () {
-          expect(ob.patp2dec(pair[1]), equals(pair[0]));
+          expect(ob.patp2dec(pair[1]), equals(BigInt.from(pair[0])));
         });
       });
     });
