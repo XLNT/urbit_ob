@@ -1,5 +1,7 @@
 import 'dart:core';
+import 'dart:math' as math;
 
+import 'package:pointycastle/src/utils.dart';
 import 'package:quiver/iterables.dart';
 import 'package:logging/logging.dart';
 
@@ -62,6 +64,11 @@ final suffixes = chunkString(suf, 3);
 
 // HELPERS
 
+List<String> splitAt(int index, String str) => [
+      str.substring(0, math.min(str.length, index)),
+      str.length >= index ? str.substring(index) : ''
+    ];
+
 /// splits a patp string into chunks of 3
 List<String> patp2syls(String name) => chunkString(name.replaceAll(RegExp(r'[\^~-]'), ''), 3);
 
@@ -116,4 +123,52 @@ BigInt patp2dec(String name) {
   );
 
   return fynd(BigInt.parse(addr, radix: 2));
+}
+
+String patq(List<int> buf) {
+  // NB(shrugs): if odd length, first chunk holds the extra syl
+  final chunked = buf.length % 2 != 0 && buf.length > 1
+      ? [
+            [buf[0]]
+          ] +
+          partition(buf.sublist(1), 2).toList()
+      : partition(buf, 2).toList();
+
+  String prefixName(List<int> byts) =>
+      byts.length == 1 ? prefixes[0] + suffixes[byts[0]] : prefixes[byts[0]] + suffixes[byts[1]];
+
+  String name(List<int> byts) =>
+      byts.length == 1 ? suffixes[byts[0]] : prefixes[byts[0]] + suffixes[byts[1]];
+
+  String alg(List<int> pair) =>
+      pair.length % 2 != 0 && chunked.length > 1 ? prefixName(pair) : name(pair);
+
+  return chunked.fold('~', (acc, elem) => acc + (acc == '~' ? '' : '-') + alg(elem));
+}
+
+List<int> patq2buf(String name) {
+  // NB(shrugs): dart-specific behavior
+  if (name == '~') {
+    return [];
+  }
+
+  final chunks = name.substring(1).split('-');
+
+  String dec2hex(int dec) => dec.toRadixString(16).padLeft(2, '0');
+
+  final splat = chunks.map((chunk) {
+    final syls = splitAt(3, chunk);
+    return syls[1] == ''
+        ? dec2hex(suffixes.indexOf(syls[0]))
+        : dec2hex(prefixes.indexOf(syls[0])) + dec2hex(suffixes.indexOf(syls[1]));
+  });
+
+  final hex = BigInt.parse(splat.join(''), radix: 16);
+
+  // NB(shrugs): dart-specific behavior
+  if (hex == BigInt.zero) {
+    return [0];
+  }
+
+  return encodeBigInt(hex);
 }

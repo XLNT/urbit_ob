@@ -2,11 +2,12 @@ import 'dart:core';
 
 import 'package:urbit_ob/src/muk.dart';
 
-final ux_1_0000 = BigInt.from(0x10000);
-final ux_ffff_ffff = BigInt.from(0xffffffff);
-final ux_1_0000_0000 = BigInt.from(0x100000000);
-final ux_ffff_ffff_ffff_ffff = BigInt.from(0xffffffffffffffff);
-final ux_ffff_ffff_0000_0000 = BigInt.from(0xffffffff00000000);
+// NB(shrugs): parse to avoid trying to write gigantic constants in js runtimes
+final ux_1_0000 = BigInt.parse("10000", radix: 16);
+final ux_ffff_ffff = BigInt.parse("ffffffff", radix: 16);
+final ux_1_0000_0000 = BigInt.parse("100000000", radix: 16);
+final ux_ffff_ffff_ffff_ffff = BigInt.parse("ffffffffffffffff", radix: 16);
+final ux_ffff_ffff_0000_0000 = BigInt.parse("ffffffff00000000", radix: 16);
 
 final u_65535 = BigInt.from(65535);
 final u_65536 = BigInt.from(65536);
