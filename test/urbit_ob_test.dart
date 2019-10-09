@@ -1,7 +1,7 @@
-import 'package:urbit_ob/urbit_ob.dart';
 import 'package:test/test.dart';
 import 'package:logging/logging.dart';
 
+import 'package:urbit_ob/urbit_ob.dart' as ob;
 import 'patps.dart';
 
 void main() {
@@ -11,12 +11,6 @@ void main() {
   });
 
   group('ob', () {
-    Ob ob;
-
-    setUp(() {
-      ob = Ob();
-    });
-
     test('should have 256 prefixes', () {
       expect(ob.prefixes.length, equals(256));
     });
@@ -25,8 +19,8 @@ void main() {
       expect(ob.suffixes.length, equals(256));
     });
 
-    test('should chunk names correctly', () {
-      expect(ob.chunk('~bosnyt-raddux'), orderedEquals(["bos", "nyt", "rad", "dux"]));
+    test('should syl names correctly', () {
+      expect(ob.patp2syls('~bosnyt-raddux'), orderedEquals(["bos", "nyt", "rad", "dux"]));
     });
 
     group('.patp', () {

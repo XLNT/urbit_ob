@@ -4,6 +4,8 @@ import 'dart:math' as math;
 
 import 'package:urbit_ob/src/helpers.dart';
 
+final Logger _log = Logger('Ob');
+
 final pre = """
 dozmarbinwansamlitsighidfidlissogdirwacsabwissib
 rigsoldopmodfoglidhopdardorlorhodfolrintogsilmir
@@ -48,8 +50,8 @@ List<String> chunkString(String chars, int size) => partition(chars.codeUnits, s
     .map((units) => units.map((u) => String.fromCharCode(u)).join(''))
     .toList();
 
-final _prefixes = chunkString(pre, 3);
-final _suffixes = chunkString(suf, 3);
+final prefixes = chunkString(pre, 3);
+final suffixes = chunkString(suf, 3);
 
 // HELPERS
 
@@ -68,48 +70,42 @@ int met(int a, int b, [int c = 0]) => b == 0 ? c : met(a, rsh(a, 1, b), c + 1);
 /// ¯\\_(ツ)_/¯
 int end(int a, int b, int c) => c % bex(bex(a) * b);
 
-class Ob {
-  final Logger _log = Logger('Ob');
+// API
 
-  List<String> chunk(String name) => patp2syls(name);
+/// encode an integer as patp
+String patp(int n) {
+  final sxz = fein(n);
+  final dyy = met(4, sxz);
+  final dyx = met(3, sxz);
 
-  List<String> get prefixes => _prefixes;
-  List<String> get suffixes => _suffixes;
+  String loop(int tsxz, int timp, String trep) {
+    final log = end(4, 1, tsxz);
+    final pre = prefixes[rsh(3, 1, log)];
+    final suf = suffixes[end(3, 1, log)];
+    final etc = timp % 4 == 0 ? timp == 0 ? '' : '--' : '-';
 
-  /// encode an integer as patp
-  String patp(int n) {
-    final sxz = fein(n);
-    final dyy = met(4, sxz);
-    final dyx = met(3, sxz);
+    final res = pre + suf + etc + trep;
 
-    String loop(int tsxz, int timp, String trep) {
-      final log = end(4, 1, tsxz);
-      final pre = prefixes[rsh(3, 1, log)];
-      final suf = suffixes[end(3, 1, log)];
-      final etc = timp % 4 == 0 ? timp == 0 ? '' : '--' : '-';
-
-      final res = pre + suf + etc + trep;
-
-      return timp == dyy ? trep : loop(rsh(4, 1, tsxz), timp + 1, res);
-    }
-
-    return '~' + (dyx <= 1 ? suffixes[sxz] : loop(sxz, 0, ''));
+    return timp == dyy ? trep : loop(rsh(4, 1, tsxz), timp + 1, res);
   }
 
-  int patp2dec(String name) {
-    // TODO: validity
-    final syls = patp2syls(name);
+  return '~' + (dyx <= 1 ? suffixes[sxz] : loop(sxz, 0, ''));
+}
 
-    String syl2bin(int idx) => idx.toRadixString(2).padLeft(8, '0');
+/// decode a patp string to dec representation
+int patp2dec(String name) {
+  // TODO: validity
+  final syls = patp2syls(name);
 
-    var idx = 0;
-    final addr = syls.fold(
-      '',
-      (acc, syl) => idx++ % 2 != 0 || syls.length == 1
-          ? acc + syl2bin(suffixes.indexOf(syl))
-          : acc + syl2bin(prefixes.indexOf(syl)),
-    );
+  String syl2bin(int idx) => idx.toRadixString(2).padLeft(8, '0');
 
-    return fynd(int.parse(addr, radix: 2));
-  }
+  var idx = 0;
+  final addr = syls.fold(
+    '',
+    (acc, syl) => idx++ % 2 != 0 || syls.length == 1
+        ? acc + syl2bin(suffixes.indexOf(syl))
+        : acc + syl2bin(prefixes.indexOf(syl)),
+  );
+
+  return fynd(int.parse(addr, radix: 2));
 }
