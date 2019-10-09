@@ -6,6 +6,7 @@ This is [urbit-ob](https://github.com/urbit/urbit-ob) but in dart, and only impl
 - `BigInt ob.patp2dec(String)`
 - `String ob.patq(List<int>)`
 - `List<int> ob.patq2buf(String)`
+- `Clan clan(BigInt)`
 
 ## Features
 

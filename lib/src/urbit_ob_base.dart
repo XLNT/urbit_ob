@@ -14,6 +14,7 @@ final one = BigInt.one;
 final two = BigInt.two;
 final three = BigInt.from(3);
 final four = BigInt.from(4);
+final eight = BigInt.from(8);
 
 final pre = """
 dozmarbinwansamlitsighidfidlissogdirwacsabwissib
@@ -86,6 +87,21 @@ BigInt met(BigInt a, BigInt b, BigInt c) =>
 BigInt end(BigInt a, BigInt b, BigInt c) => c % bex(bex(a) * b);
 
 // API
+
+enum Clan {
+  Galaxy,
+  Star,
+  Planet,
+  Moon,
+  Comet,
+}
+
+Clan clan(BigInt point) {
+  final wid = met(three, point, zero);
+  return wid <= one
+      ? Clan.Galaxy
+      : wid == two ? Clan.Star : wid <= four ? Clan.Planet : wid <= eight ? Clan.Moon : Clan.Comet;
+}
 
 /// encode an integer as patp
 String patp(BigInt n) {
