@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:pointycastle/src/utils.dart';
 
 /// generate these test cases via
@@ -81,29 +79,27 @@ final bigpatps = [
 ];
 
 final patqs = [
-  [encodeBigInt(BigInt.from(0)), "~"],
+  [_encodeInt(0), "~"],
   [
     [0],
     "~zod"
   ],
-  [encodeBigInt(BigInt.from(512)), "~binzod"],
-  [encodeBigInt(BigInt.from(1024)), "~samzod"],
-  [encodeBigInt(BigInt.from(4016240379)), "~poldec-tonteg"],
-  [encodeBigInt(BigInt.from(1208402137)), "~nidsut-tomdun"],
+  [_encodeInt(512), "~binzod"],
+  [_encodeInt(1024), "~samzod"],
+  [_encodeInt(4016240379), "~poldec-tonteg"],
+  [_encodeInt(1208402137), "~nidsut-tomdun"],
+  [_encodeHex("01010101010101010102"), "~marnec-marnec-marnec-marnec-marbud"],
   [
-    encodeBigInt(BigInt.parse("01010101010101010102", radix: 16)),
-    "~marnec-marnec-marnec-marnec-marbud"
-  ],
-  [
-    encodeBigInt(BigInt.parse(
-        "6d7920617765736f6d65207572626974207469636b65742c206920616d20736f206c75636b79",
-        radix: 16)),
+    _encodeHex("6d7920617765736f6d65207572626974207469636b65742c206920616d20736f206c75636b79"),
     "~tastud-holruc-sidwet-salpel-taswet-holdeg-paddec-davdut-holdut-davwex-balwet-divwen-holdet-holruc-taslun-salpel-holtux-dacwex-baltud"
   ],
-  [encodeBigInt(BigInt.parse("0456a869eb", radix: 16)), "~dozsev-postuc-davlux"],
+  [_encodeHex("0456a869eb"), "~dozsev-postuc-davlux"],
   // TODO: string encoding
   // [_encode("hello world"), "~dozsev-postuc-davlux"]
 ];
+
+List<int> _encodeInt(int n) => encodeBigInt(BigInt.from(n));
+List<int> _encodeHex(String hexString) => encodeBigInt(BigInt.parse(hexString, radix: 16));
 
 // List<int> _encode(String word) {
 //   print("${word} -> ${utf8.encode(word)}");
