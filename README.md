@@ -13,9 +13,7 @@ TODO:
 ## Example
 
 ```dart
-import 'package:urbit_ob/urbit_ob.dart'
-
-final ob = Ob();
+import 'package:urbit_ob/urbit_ob.dart' as ob;
 
 assert(ob.patp(BigInt.from(19268096)) == "~bosnyt-raddux");
 assert(ob.patp2dec("~bosnyt-raddux") == BigInt.from(19268096));
