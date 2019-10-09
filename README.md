@@ -15,6 +15,15 @@ TODO:
 ```dart
 import 'package:urbit_ob/urbit_ob.dart' as ob;
 
-assert(ob.patp(BigInt.from(19268096)) == "~bosnyt-raddux");
-assert(ob.patp2dec("~bosnyt-raddux") == BigInt.from(19268096));
+final point = BigInt.from(19268096);
+final name = "~bosnyt-raddux";
+
+assert(ob.patp(point) == name);
+assert(ob.patp2dec(name) == point);
+```
+
+## Tests
+
+```bash
+pub run test
 ```
